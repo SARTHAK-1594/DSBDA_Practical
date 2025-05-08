@@ -1,0 +1,223 @@
+[cloudera@quickstart ~]$ hive
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+WARNING: Hive CLI is deprecated and migration to Beeline is recommended.
+hive> create database dead;
+OK
+Time taken: 3.347 seconds
+hive> use dead;
+OK
+Time taken: 0.074 seconds
+hive> create table flight(fno int,year int,dest varchar(10),delay float);
+OK
+Time taken: 1.759 seconds
+hive> alter table flight rename to air_flight;
+OK
+Time taken: 0.951 seconds
+hive> alter table air_flight add columns(source varchar(10));
+OK
+Time taken: 0.424 seconds
+hive> drop table flight;
+OK
+Time taken: 0.371 seconds
+hive> desc air_flight;
+OK
+fno                 	int                 	                    
+year                	int                 	                    
+dest                	varchar(10)         	                    
+delay               	float               	                    
+source              	varchar(10)         	                    
+Time taken: 0.36 seconds, Fetched: 5 row(s)
+hive> create table flight(fno int,year int,dest varchar(10),delay float,flight_date varchar(10))
+    > row format delimited
+    > fields terminated by ','
+    > lines terminated by '\n'
+    > stored as textfile;
+OK
+Time taken: 0.87 seconds
+hive> load data local inpath 'data.txt' into table flight;
+Loading data to table dead.flight
+Table dead.flight stats: [numFiles=1, totalSize=84]
+OK
+Time taken: 2.054 seconds
+hive> select * from flight;
+OK
+101	2009	Warje	30.0	12/5/2009
+102	2008	Wakad	50.0	13/5/2008
+103	2008	Karve	60.0	13/5/2008
+Time taken: 1.275 seconds, Fetched: 3 row(s)
+hive> create external table airports(fno int,name varchar(10),country varchar(10))
+    > row format delimited
+    > fields terminated by ','
+    > lines terminated by '\n'
+    > stored as textfile;
+OK
+Time taken: 0.264 seconds
+hive> insert into airports values(101,'AP airlines','Japan');
+Query ID = cloudera_20250508031414_927037fa-131e-480d-8e13-00a99c2535fa
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1746694721022_0001, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0001/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2025-05-08 03:16:51,955 Stage-1 map = 0%,  reduce = 0%
+2025-05-08 03:17:53,035 Stage-1 map = 0%,  reduce = 0%
+2025-05-08 03:17:56,698 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 4.84 sec
+MapReduce Total cumulative CPU time: 4 seconds 840 msec
+Ended Job = job_1746694721022_0001
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to: hdfs://quickstart.cloudera:8020/user/hive/warehouse/dead.db/airports/.hive-staging_hive_2025-05-08_03-14-17_016_3914269360174487915-1/-ext-10000
+Loading data to table dead.airports
+Table dead.airports stats: [numFiles=1, numRows=1, totalSize=21, rawDataSize=20]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 4.84 sec   HDFS Read: 4406 HDFS Write: 90 SUCCESS
+Total MapReduce CPU Time Spent: 4 seconds 840 msec
+OK
+Time taken: 226.537 seconds
+hive> insert into airports values(102,'Russ lines','Russia');
+Query ID = cloudera_20250508031818_da37e0f5-da2b-410f-a6e4-fce9ff4628a6
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1746694721022_0002, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0002/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2025-05-08 03:19:03,725 Stage-1 map = 0%,  reduce = 0%
+2025-05-08 03:19:30,408 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.09 sec
+MapReduce Total cumulative CPU time: 5 seconds 90 msec
+Ended Job = job_1746694721022_0002
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to: hdfs://quickstart.cloudera:8020/user/hive/warehouse/dead.db/airports/.hive-staging_hive_2025-05-08_03-18-37_742_2060291722748601123-1/-ext-10000
+Loading data to table dead.airports
+Table dead.airports stats: [numFiles=2, numRows=2, totalSize=43, rawDataSize=41]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 5.09 sec   HDFS Read: 4490 HDFS Write: 91 SUCCESS
+Total MapReduce CPU Time Spent: 5 seconds 90 msec
+OK
+Time taken: 57.21 seconds
+hive> insert into airports values(103,'Dread lines','USA');
+Query ID = cloudera_20250508031919_def8c579-02b8-4c0c-9996-be0a34e335ed
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1746694721022_0003, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0003/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0003
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2025-05-08 03:20:21,655 Stage-1 map = 0%,  reduce = 0%
+2025-05-08 03:20:51,404 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.86 sec
+MapReduce Total cumulative CPU time: 5 seconds 860 msec
+Ended Job = job_1746694721022_0003
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to: hdfs://quickstart.cloudera:8020/user/hive/warehouse/dead.db/airports/.hive-staging_hive_2025-05-08_03-19-59_039_8871290935176589316-1/-ext-10000
+Loading data to table dead.airports
+Table dead.airports stats: [numFiles=3, numRows=3, totalSize=62, rawDataSize=59]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 5.86 sec   HDFS Read: 4490 HDFS Write: 88 SUCCESS
+Total MapReduce CPU Time Spent: 5 seconds 860 msec
+OK
+Time taken: 56.913 seconds
+hive> select a.fno,a.dest,a.delay,a.flight_date,b.name,b.country
+    > from flight a join airports b
+    > on(a.fno=b.fno);
+Query ID = cloudera_20250508032424_bd94d642-2582-4721-ac6a-14126b158984
+Total jobs = 1
+Execution log at: /tmp/cloudera/cloudera_20250508032424_bd94d642-2582-4721-ac6a-14126b158984.log
+2025-05-08 03:24:39	Starting to launch local task to process map join;	maximum memory = 932184064
+2025-05-08 03:24:43	Dump the side-table for tag: 1 with group count: 3 into file: file:/tmp/cloudera/bb2f1c11-9b7a-497e-a496-ccabb94fe83a/hive_2025-05-08_03-24-23_078_8285797688653810939-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile01--.hashtable
+2025-05-08 03:24:43	Uploaded 1 File to: file:/tmp/cloudera/bb2f1c11-9b7a-497e-a496-ccabb94fe83a/hive_2025-05-08_03-24-23_078_8285797688653810939-1/-local-10003/HashTable-Stage-3/MapJoin-mapfile01--.hashtable (367 bytes)
+2025-05-08 03:24:43	End of local task; Time Taken: 4.025 sec.
+Execution completed successfully
+MapredLocal task succeeded
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1746694721022_0004, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0004/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0004
+Hadoop job information for Stage-3: number of mappers: 1; number of reducers: 0
+2025-05-08 03:25:02,210 Stage-3 map = 0%,  reduce = 0%
+2025-05-08 03:25:27,777 Stage-3 map = 100%,  reduce = 0%, Cumulative CPU 5.54 sec
+MapReduce Total cumulative CPU time: 5 seconds 540 msec
+Ended Job = job_1746694721022_0004
+MapReduce Jobs Launched: 
+Stage-Stage-3: Map: 1   Cumulative CPU: 5.54 sec   HDFS Read: 7496 HDFS Write: 125 SUCCESS
+Total MapReduce CPU Time Spent: 5 seconds 540 msec
+OK
+101	Warje	30.0	12/5/2009	AP airline	Japan
+102	Wakad	50.0	13/5/2008	Russ lines	Russia
+103	Karve	60.0	13/5/2008	Dread line	USA
+Time taken: 68.367 seconds, Fetched: 3 row(s)
+hive> select * from airports;
+OK
+101	AP airline	Japan
+102	Russ lines	Russia
+103	Dread line	USA
+Time taken: 0.183 seconds, Fetched: 3 row(s)
+hive> create index flight_index on table flight (fno)
+    > as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+    > with deferred rebuild;
+OK
+Time taken: 1.152 seconds
+hive> show indexes on flight;
+OK
+flight_index        	flight              	fno                 	dead__flight_flight_index__	compact             	
+Time taken: 0.314 seconds, Fetched: 1 row(s)
+hive> select flight_date,avg(delay) as avg_delay
+    > from flight
+    > where year=2008
+    > group by flight_date
+    > order by flight_date;
+Query ID = cloudera_20250508034747_5b51d94d-9fb9-43d9-8fbd-0d6f89e6d7a2
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1746694721022_0005, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0005/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0005
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1
+2025-05-08 03:47:46,211 Stage-1 map = 0%,  reduce = 0%
+2025-05-08 03:48:14,621 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.38 sec
+2025-05-08 03:48:34,857 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 6.38 sec
+MapReduce Total cumulative CPU time: 9 seconds 380 msec
+Ended Job = job_1746694721022_0005
+Launching Job 2 out of 2
+Number of reduce tasks determined at compile time: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Starting Job = job_1746694721022_0006, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1746694721022_0006/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1746694721022_0006
+Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1
+2025-05-08 03:48:53,620 Stage-2 map = 0%,  reduce = 0%
+2025-05-08 03:49:07,719 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 2.58 sec
+2025-05-08 03:49:25,762 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 5.3 sec
+MapReduce Total cumulative CPU time: 5 seconds 300 msec
+Ended Job = job_1746694721022_0006
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 9.38 sec   HDFS Read: 9287 HDFS Write: 131 SUCCESS
+Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 5.3 sec   HDFS Read: 5232 HDFS Write: 15 SUCCESS
+Total MapReduce CPU Time Spent: 14 seconds 680 msec
+OK
+13/5/2008	55.0
+Time taken: 124.927 seconds, Fetched: 1 row(s)
+
+----------------------------------------------------------------------------------------------------
+
+/home/cloudera/data.txt
+101,2009,Warje,30,12/5/2009
+102,2008,Wakad,50,13/5/2008
+103,2008,Karve,60,13/5/2008
+
